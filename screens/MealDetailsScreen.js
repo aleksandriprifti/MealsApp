@@ -1,17 +1,44 @@
-import { View, Text, StyleSheet, Image } from "react-native";
+import { useLayoutEffect } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  ScrollView,
+  Button,
+} from "react-native";
 import React from "react";
 import MealDetails from "../components/MealDetails";
 import { MEALS } from "../data/dummy-data";
 import Subtitle from "../components/MealDetail/Subtitle";
 import List from "../components/MealDetail/List";
+import IconButton from "../components/IconButton";
 
-const MealDetailsScreen = ({ route }) => {
+const MealDetailsScreen = ({ route, navigation }) => {
   const mealId = route.params.mealId;
 
   const selectedMeal = MEALS.find((meal) => meal.id === mealId);
 
+  const headerButtonPressedhandler = () => {
+    console.log("Pressed");
+  };
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => {
+        return (
+          <IconButton
+            icon="star"
+            color="white"
+            onPress={headerButtonPressedhandler}
+          />
+        );
+      },
+    });
+  }, [navigation, headerButtonPressedhandler]);
+
   return (
-    <View>
+    <ScrollView style={styles.rootContainer}>
       <Image source={{ uri: selectedMeal.imageUrl }} style={styles.image} />
       <Text style={styles.title}>{selectedMeal.title}</Text>
       <MealDetails
@@ -20,18 +47,22 @@ const MealDetailsScreen = ({ route }) => {
         affordability={selectedMeal.affordability}
         textStyle={styles.detailText}
       />
-      <Subtitle title="Ingredients" />
-      <List data={selectedMeal.ingredients} />
-
-      <Subtitle title="Steps" />
-      <List data={selectedMeal.steps} />
-    </View>
+      <View style={styles.listOuterContainer}>
+        <View style={styles.listContainer}>
+          <Subtitle title="Ingredients" />
+          <List data={selectedMeal.ingredients} />
+          <Subtitle title="Steps" />
+          <List data={selectedMeal.steps} />
+        </View>
+      </View>
+    </ScrollView>
   );
 };
 
 export default MealDetailsScreen;
 
 const styles = StyleSheet.create({
+  rootContainer: { marginBottom: 32 },
   image: {
     width: "100%",
     height: 350,
@@ -41,7 +72,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     margin: 8,
     textAlign: "center",
-    color: "white",
+    color: "#e2b497",
   },
   detailText: {
     color: "white",
@@ -58,5 +89,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 24,
     marginVertical: 4,
     padding: 4,
+  },
+  listOuterContainer: {
+    alignItems: "center",
+  },
+  listContainer: {
+    width: "80%",
   },
 });

@@ -4,9 +4,7 @@ import { CATEGORIES } from "../data/dummy-data";
 import CategoryGridTile from "../components/CategoryGridTile";
 
 const CategoryScreen = ({ navigation }) => {
-
   const renderCategoryItem = (itemData) => {
-    
     const pressHandler = () => {
       navigation.navigate("MealsOverview", {
         categoryId: itemData.item.id,
@@ -27,7 +25,7 @@ const CategoryScreen = ({ navigation }) => {
         data={CATEGORIES}
         keyExtractor={(item) => item.id}
         renderItem={renderCategoryItem}
-        numColumns={2}
+        //numColumns={2}
       />
     </SafeAreaView>
   );
